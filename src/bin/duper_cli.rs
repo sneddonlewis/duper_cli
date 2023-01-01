@@ -1,6 +1,6 @@
-use std::fs;
 use std::path::PathBuf;
 use clap::Parser;
+use walkdir::WalkDir;
 
 fn main() {
     println!("Duper");
@@ -8,7 +8,7 @@ fn main() {
     let path = opts.path.unwrap_or(PathBuf::from(r"./test_data"));
     println!("Path: {:?}", path);
 
-    for file in fs::read_dir(path).unwrap() {
-        println!("{}", file.unwrap().path().display())
+    for entry in WalkDir::new(path.as_path()).into_iter().filter_map(|e| e.ok()) {
+        println!("{}", entry.path().display());
     }
 }
