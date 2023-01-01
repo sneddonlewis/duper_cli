@@ -13,8 +13,8 @@ pub struct FileList {
 
 impl FileList {
     pub fn list_files(&self) {
-        for i in 0..self.files.len() {
-            println!("{:?}", self.files[i].path);
+        for file in &self.files {
+            println!("{:?}", file.path);
         }
     }
 }
@@ -25,10 +25,8 @@ pub fn new_file_list(base_path: PathBuf, extension_filter: Option<String>) -> Fi
     for entry in WalkDir::new(base_path.as_path())
         .into_iter()
         .filter_map(|e| e.ok())
+        .filter(|e| !e.path().is_dir())
     {
-        if entry.path().is_dir() {
-            continue;
-        }
         if extension_filter.is_some() {
             // skip files without extension if there is a filter
             if entry.path().extension().is_none() {
