@@ -1,9 +1,11 @@
+use std::fs::metadata;
 use std::path::PathBuf;
 use walkdir::WalkDir;
 
 #[derive(Debug, Clone)]
 struct FoundFile {
     path: PathBuf,
+    size: u64,
 }
 
 #[derive(Debug)]
@@ -14,7 +16,7 @@ pub struct FileList {
 impl FileList {
     pub fn list_files(&self) {
         for file in &self.files {
-            println!("{:?}", file.path);
+            println!("{:?}", file);
         }
     }
 }
@@ -33,8 +35,10 @@ pub fn new_file_list(base_path: PathBuf, extension_filter: Option<String>) -> Fi
                 continue;
             }
         }
+        let file_size = metadata(entry.path()).unwrap().len();
         files.push(FoundFile {
             path: entry.path().to_owned(),
+            size: file_size,
         })
     }
 
