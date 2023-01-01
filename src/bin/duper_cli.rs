@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 use clap::Parser;
 use walkdir::WalkDir;
+use duper::found_file::FoundFile;
 
 fn main() {
     println!("Duper");
@@ -12,6 +13,9 @@ fn main() {
 
     // does not follow sym links
     // walks hidden files
+
+    let mut files: Vec<FoundFile> = Vec::new();
+
     for entry in WalkDir::new(path.as_path()).into_iter().filter_map(|e| e.ok()) {
         if entry.path().is_dir() {
             continue;
@@ -22,6 +26,10 @@ fn main() {
                 continue;
             }
         }
-        println!("{}", entry.path().display());
+        files.push(FoundFile{ path: entry.path().to_owned() })
+    }
+
+    for file in files.into_iter() {
+        println!("{:?}", file.path);
     }
 }
