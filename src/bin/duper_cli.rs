@@ -5,6 +5,9 @@ use walkdir::WalkDir;
 fn main() {
     println!("Duper");
     let opts = duper::opts::Opts::parse();
+    let extension_filter = opts.extension;
+    println!("Extension Filter: {:?}", extension_filter);
+
     let path = opts.path.unwrap_or(PathBuf::from(r"./test_data"));
 
     // does not follow sym links

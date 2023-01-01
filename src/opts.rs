@@ -9,4 +9,7 @@ pub struct Opts {
 
     #[clap(short = 'p', long = "path")]
     pub path: Option<PathBuf>,
+
+    #[clap(short = 'e', long = "extension")]
+    pub extension: Option<String>
 }
