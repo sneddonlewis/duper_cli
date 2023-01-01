@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use walkdir::WalkDir;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct FoundFile {
     path: PathBuf,
 }
@@ -13,7 +13,9 @@ pub struct FileList {
 
 impl FileList {
     pub fn list_files(&self) {
-        println!("{:?}", &self)
+        for i in 0..self.files.len() {
+            println!("{:?}", self.files[i].path);
+        }
     }
 }
 
@@ -34,6 +36,6 @@ pub fn new_file_list(base_path: PathBuf, extension_filter: Option<String>) -> Fi
     }
 
     FileList {
-        files
+        files: files.clone()
     }
 }
