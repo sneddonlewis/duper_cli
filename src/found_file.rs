@@ -1,20 +1,19 @@
 use std::path::PathBuf;
 use walkdir::WalkDir;
 
+#[derive(Debug)]
 struct FoundFile {
     path: PathBuf,
 }
 
+#[derive(Debug)]
 pub struct FileList {
     files: Vec<FoundFile>,
 }
 
 impl FileList {
     pub fn list_files(&self) {
-        // for file in self.files.into_iter() {
-        //     println!("{:?}", file.path);
-        // }
-        println!("list files here");
+        println!("{:?}", &self)
     }
 }
 
