@@ -11,5 +11,5 @@ pub struct Opts {
     pub path: Option<PathBuf>,
 
     #[clap(short = 'e', long = "extension")]
-    pub extension: Option<String>
+    pub extension: Option<String>,
 }

@@ -1,6 +1,6 @@
-use std::path::PathBuf;
 use clap::Parser;
 use duper::found_file::new_file_list;
+use std::path::PathBuf;
 
 fn main() {
     println!("Duper");
