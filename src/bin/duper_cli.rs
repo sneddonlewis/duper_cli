@@ -16,6 +16,12 @@ fn main() {
         if entry.path().is_dir() {
             continue;
         }
+        if extension_filter.is_some() {
+            // skip files without extension if there is a filter
+            if entry.path().extension().is_none() {
+                continue;
+            }
+        }
         println!("{}", entry.path().display());
     }
 }
