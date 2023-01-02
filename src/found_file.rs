@@ -11,7 +11,7 @@ struct FoundFile {
 
 #[derive(Debug)]
 pub struct FileList {
-    files: Vec<FoundFile>,
+    files: HashMap<u64, Vec<FoundFile>>,
 }
 
 impl FileList {
@@ -55,11 +55,8 @@ pub fn new_file_list(base_path: PathBuf, extension_filter: Option<String>) -> Fi
             }]);
         }
     }
-    for list in files_by_size {
-        println!("{:?}", list);
-    }
 
     FileList {
-        files: files.to_vec(),
+        files: files_by_size.to_owned(),
     }
 }
