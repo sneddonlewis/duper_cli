@@ -16,8 +16,11 @@ pub struct FileList {
 
 impl FileList {
     pub fn list_files(&self) {
-        for file_list in self.files.keys().into_iter() {
-            println!("{:?} bytes", file_list);
+        for (key, file_list) in self.files.iter() {
+            println!("{:?} bytes", key);
+            for file in file_list {
+            println!("\t{:?}", file.path);
+            }
         }
     }
 }
