@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::fs::metadata;
 use std::path::PathBuf;
 use walkdir::WalkDir;
@@ -23,6 +24,7 @@ impl FileList {
 
 pub fn new_file_list(base_path: PathBuf, extension_filter: Option<String>) -> FileList {
     let mut files: Vec<FoundFile> = Vec::new();
+    let mut files_by_size: HashMap<u64, Vec<FoundFile>> = HashMap::new();
 
     for entry in WalkDir::new(base_path.as_path())
         .into_iter()
@@ -39,10 +41,25 @@ pub fn new_file_list(base_path: PathBuf, extension_filter: Option<String>) -> Fi
         files.push(FoundFile {
             path: entry.path().to_owned(),
             size: file_size,
-        })
+        });
+        if files_by_size.contains_key(&file_size) {
+            // push found file into vec
+            files_by_size.entry(file_size).and_modify(|f| f.push(FoundFile{
+                path: entry.path().to_owned(),
+                size: file_size,
+            }));
+        } else {
+            files_by_size.insert(file_size, vec![FoundFile{
+                path: entry.path().to_owned(),
+                size: file_size,
+            }]);
+        }
+    }
+    for list in files_by_size {
+        println!("{:?}", list);
     }
 
     FileList {
-        files: files.clone(),
+        files: files.to_vec(),
     }
 }
