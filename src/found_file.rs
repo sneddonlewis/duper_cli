@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::ffi::OsStr;
 use std::fs::metadata;
 use std::path::PathBuf;
 use walkdir::WalkDir;
@@ -37,6 +38,9 @@ pub fn new_file_list(base_path: PathBuf, extension_filter: Option<String>) -> Fi
         if extension_filter.is_some() {
             // skip files without extension if there is a filter
             if entry.path().extension().is_none() {
+                continue;
+            }
+            if entry.path().extension().unwrap() != OsStr::new(&extension_filter.as_ref().unwrap()) {
                 continue;
             }
         }
