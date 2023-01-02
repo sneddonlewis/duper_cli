@@ -20,7 +20,7 @@ impl FileList {
         for (key, file_list) in self.files.iter() {
             println!("{:?} bytes", key);
             for file in file_list {
-            println!("\t{:?}", file.path);
+                println!("\t{:?}", file.path);
             }
         }
     }
@@ -51,12 +51,14 @@ pub fn new_file_list(base_path: PathBuf, extension_filter: Option<String>) -> Fi
         });
         if files_by_size.contains_key(&file_size) {
             // push found file into vec
-            files_by_size.entry(file_size).and_modify(|f| f.push(FoundFile{
-                path: entry.path().to_owned(),
-                size: file_size,
-            }));
+            files_by_size.entry(file_size).and_modify(|f| {
+                f.push(FoundFile {
+                    path: entry.path().to_owned(),
+                    size: file_size,
+                })
+            });
         } else {
-            files_by_size.insert(file_size, vec![FoundFile{
+            files_by_size.insert(file_size, vec![FoundFile {
                 path: entry.path().to_owned(),
                 size: file_size,
             }]);
