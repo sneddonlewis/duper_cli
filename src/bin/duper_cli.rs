@@ -1,5 +1,5 @@
 use clap::Parser;
-use duper::found_file::new_file_list;
+use duper::found_file::{Duplicates, new_file_list};
 use std::path::PathBuf;
 
 fn main() {
@@ -10,6 +10,8 @@ fn main() {
 
     let path = opts.path.unwrap_or(PathBuf::from(r"./test_data"));
 
-    let file_list = new_file_list(path, extension_filter);
-    file_list.list_files();
+    let mut file_list = new_file_list(path, extension_filter);
+    // file_list.list_files();
+    let duplicates = Duplicates::from_file_list(&mut file_list);
+    duplicates.list_files();
 }
