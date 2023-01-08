@@ -55,12 +55,15 @@ impl Duplicates {
     }
 
     pub fn list_files(&self) {
-        for (key, file_list) in self.files.iter() {
+        self.files.iter().for_each(|(key, file_list)| {
             println!("{} hash", key);
-            for file in file_list {
-                println!("\t{:?}", file.path);
-            }
-        }
+            file_list
+                .iter()
+                .map(|file| file.path.clone())
+                .for_each(|path| {
+                    println!("\t{:?}", path);
+                });
+        });
     }
 }
 
@@ -80,10 +83,10 @@ fn partition_by_duplicate_hash(files: &Vec<DuplicateFile>) -> BTreeMap<String, V
                     result
                         .entry(file.hash.clone())
                         .and_modify(|list| list.push(file.clone()));
-                },
+                }
                 false => {
                     result.insert(file.hash.clone(), vec![file.clone()]);
-                },
+                }
             };
         }
     }
@@ -123,7 +126,7 @@ pub fn new_file_list(base_path: PathBuf, extension_filter: Option<String>) -> Fi
                         size: file_size,
                     })
                 });
-            },
+            }
             false => {
                 files_by_size.insert(
                     file_size,
@@ -132,7 +135,7 @@ pub fn new_file_list(base_path: PathBuf, extension_filter: Option<String>) -> Fi
                         size: file_size,
                     }],
                 );
-            },
+            }
         };
     }
 
