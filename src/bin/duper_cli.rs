@@ -1,5 +1,5 @@
 use clap::Parser;
-use duper::found_file::{Duplicates, new_file_list};
+use duper::found_file::{new_file_list, Duplicates};
 use std::path::PathBuf;
 
 fn main() {
