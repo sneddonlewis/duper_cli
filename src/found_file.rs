@@ -110,24 +110,26 @@ pub fn new_file_list(base_path: PathBuf, extension_filter: Option<String>) -> Fi
         }
         let file_size = metadata(entry.path()).unwrap().len();
 
-        if files_by_size.contains_key(&file_size) {
+        match files_by_size.contains_key(&file_size) {
             // push found file into vec
-            files_by_size.entry(file_size).and_modify(|f| {
-                f.push(FoundFile {
-                    path: entry.path().to_owned(),
-                    size: file_size,
-                })
-            });
-        } else {
-            // create a new vec with the file if size not seen
-            files_by_size.insert(
-                file_size,
-                vec![FoundFile {
-                    path: entry.path().to_owned(),
-                    size: file_size,
-                }],
-            );
-        }
+            true => {
+                files_by_size.entry(file_size).and_modify(|f| {
+                    f.push(FoundFile {
+                        path: entry.path().to_owned(),
+                        size: file_size,
+                    })
+                });
+            },
+            false => {
+                files_by_size.insert(
+                    file_size,
+                    vec![FoundFile {
+                        path: entry.path().to_owned(),
+                        size: file_size,
+                    }],
+                );
+            },
+        };
     }
 
     // Delete file size entries with only one file as cannot be duplicates
