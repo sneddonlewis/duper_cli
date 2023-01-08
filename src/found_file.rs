@@ -108,7 +108,11 @@ pub fn new_file_list(base_path: PathBuf, extension_filter: Option<String>) -> Fi
                 continue;
             }
         }
-        let file_size = metadata(entry.path()).unwrap().len();
+        let file_metadata = metadata(entry.path());
+        if file_metadata.is_err() {
+            continue;
+        }
+        let file_size = file_metadata.unwrap().len();
 
         match files_by_size.contains_key(&file_size) {
             // push found file into vec
