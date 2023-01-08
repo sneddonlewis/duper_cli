@@ -76,8 +76,10 @@ fn partition_by_duplicate_hash(files: &Vec<DuplicateFile>) -> BTreeMap<String, V
 
     // collect result
     let mut result: BTreeMap<String, Vec<DuplicateFile>> = BTreeMap::new();
-    for file in files {
-        if hashes.contains(&file.hash) {
+    files
+        .iter()
+        .filter(|f| hashes.contains(&f.hash))
+        .for_each(|file| {
             match result.contains_key(&file.hash) {
                 true => {
                     result
@@ -88,8 +90,7 @@ fn partition_by_duplicate_hash(files: &Vec<DuplicateFile>) -> BTreeMap<String, V
                     result.insert(file.hash.clone(), vec![file.clone()]);
                 }
             };
-        }
-    }
+        });
     result.clone()
 }
 
