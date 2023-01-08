@@ -41,11 +41,11 @@ impl Duplicates {
             // dedup and put the dups in the result
             files.sort_by(|f, s| f.hash.cmp(&s.hash));
 
-            for intermediary_result in partition_by_duplicate_hash(files) {
-                result
-                    .files
-                    .insert(intermediary_result.0, intermediary_result.1);
-            }
+            partition_by_duplicate_hash(files)
+                .iter()
+                .for_each(|(hash, file_list)| {
+                    result.files.insert(hash.to_string(), file_list.to_vec());
+                });
         }
 
         // remove unique hashes
@@ -72,10 +72,9 @@ fn partition_by_duplicate_hash(files: &Vec<DuplicateFile>) -> BTreeMap<String, V
         .into_iter()
         .map(|f| f.hash.clone())
         .collect::<Vec<String>>();
-    // remove unique values
 
-    // collect result
     let mut result: BTreeMap<String, Vec<DuplicateFile>> = BTreeMap::new();
+
     files
         .iter()
         .filter(|f| hashes.contains(&f.hash))
@@ -144,28 +143,42 @@ pub fn new_file_list(base_path: PathBuf, extension_filter: Option<String>) -> Fi
     files_by_size.retain(|_, list| list.len() > 1);
     // Get file hashes
     let mut duplicates: HashMap<u64, Vec<DuplicateFile>> = HashMap::new();
-    for file_group in files_by_size.values() {
+    files_by_size.values().for_each(|file_group| {
         let mut potential_duplicates: Vec<DuplicateFile> = vec![];
-        for file in file_group {
+        file_group.iter().for_each(|file| {
             // map to dup file with hash
-            let mut hasher = md5::Md5::new();
             // read the file and pass it's contents to hasher.update()
-            let contents = read_to_string(&file.path).unwrap();
-            hasher.update(contents);
-            let hash = format!("{:x}", &hasher.finalize());
+            let contents = read_to_string(&file.path);
+            // Skip file if unable to read
+            if contents.is_err() {
+                return;
+            }
+            let hash = get_md5_hash_from_string(contents.unwrap());
             potential_duplicates.push(DuplicateFile {
                 path: file.path.clone(),
                 size: file.size,
                 hash,
-            })
-        }
-        duplicates.insert(
-            potential_duplicates.first().unwrap().size,
-            potential_duplicates,
-        );
-    }
+            });
+        });
+
+        match potential_duplicates.len() {
+            0 => {}
+            _ => {
+                duplicates.insert(
+                    potential_duplicates.first().unwrap().size,
+                    potential_duplicates,
+                );
+            }
+        };
+    });
 
     FileList {
         files: duplicates.to_owned(),
     }
+}
+
+fn get_md5_hash_from_string(content: String) -> String {
+    let mut hasher = md5::Md5::new();
+    hasher.update(content);
+    format!("{:x}", &hasher.finalize())
 }
