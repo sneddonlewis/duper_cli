@@ -24,10 +24,13 @@ impl FoundFile {
         self.size
     }
 
-    pub fn md5_hash(&self) -> String {
+    pub fn md5_hash(&self) -> Result<String, &str> {
         let contents = read_to_string(&self.path);
+        if contents.is_err() {
+            return Err("Unable to read file");
+        }
         let hash = get_md5_hash_from_string(contents.unwrap());
-        hash
+        Ok(hash)
     }
 }
 

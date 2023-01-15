@@ -65,7 +65,11 @@ impl DuplicateFiles {
         files_by_size.values().for_each(|file_group| {
             let mut potential_duplicates: Vec<HashedFileInfo> = vec![];
             file_group.iter().for_each(|file| {
-                let hash = file.md5_hash();
+                let hash_result = file.md5_hash();
+                if hash_result.is_err() {
+                    return;
+                }
+                let hash = hash_result.unwrap();
                 potential_duplicates.push(HashedFileInfo {
                     path: file.path(),
                     size: file.size(),
@@ -122,7 +126,7 @@ impl DuplicateFiles {
     }
 }
 
-pub fn partition_by_duplicate_hash(
+fn partition_by_duplicate_hash(
     files: &mut Vec<HashedFileInfo>,
 ) -> HashMap<String, Vec<HashedFileInfo>> {
     let hashes = files
