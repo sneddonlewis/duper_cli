@@ -17,7 +17,7 @@ pub struct DuplicateFiles {
 }
 
 impl DuplicateFiles {
-    pub fn new(base_path: PathBuf, extension_filter: Option<String>) -> DuplicateFiles {
+    pub fn search(base_path: PathBuf, extension_filter: Option<String>) -> DuplicateFiles {
         let mut files_by_size: HashMap<u64, Vec<FoundFile>> = HashMap::new();
 
         for entry in WalkDir::new(base_path.as_path())
