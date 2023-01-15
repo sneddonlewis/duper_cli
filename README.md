@@ -1,17 +1,17 @@
-## Duper
+# Duper
 CLI application to identify and remove duplicate files.  
 
-### Usage
+## Usage
 
 ```
 USAGE:
-duper_cli [OPTIONS] [ARGS]...
-
-ARGS:
-<ARGS>...
+    duper_cli [OPTIONS]
 
 OPTIONS:
--e, --extension <EXTENSION>
--h, --help                     Print help information
--p, --path <PATH>
+    -e, --extension <EXTENSION>    File types to search for (by file extension). Defaults to any
+                                   file type
+    -h, --help                     Print help information
+    -p, --path <PATH>              Path to the directory that will be recursively searched for
+                                   duplicates. Defaults to the Present Working Directory
+    -V, --version                  Print version information
 ```
