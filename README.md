@@ -1,5 +1,5 @@
 # Duper
-CLI application to identify and remove duplicate files.  
+CLI application to identify duplicate files.  
 
 ## Usage
 
