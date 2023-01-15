@@ -1,9 +1,7 @@
-use hex_literal::hex;
-use md5::{Digest, Md5};
+use md5::Digest;
 use std::collections::{BTreeMap, HashMap};
 use std::ffi::OsStr;
 use std::fs::{metadata, read_to_string};
-use std::hash::Hash;
 use std::path::PathBuf;
 use walkdir::WalkDir;
 
@@ -49,7 +47,7 @@ impl Duplicates {
         }
 
         // remove unique hashes
-        result.files.retain(|k, v| v.len() > 1);
+        result.files.retain(|_, v| v.len() > 1);
 
         result
     }
