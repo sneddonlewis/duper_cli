@@ -1,9 +1,11 @@
+use std::fs::read_to_string;
+use md5::Digest;
 use std::path::PathBuf;
 
 #[derive(Debug, Clone)]
 pub struct FoundFile {
-    pub(crate) path: PathBuf,
-    pub(crate) size: u64,
+    path: PathBuf,
+    size: u64,
 }
 
 impl FoundFile {
@@ -13,4 +15,24 @@ impl FoundFile {
             size,
         }
     }
+
+    pub fn path(&self) -> PathBuf {
+        self.path.clone()
+    }
+
+    pub fn size(&self) -> u64 {
+        self.size
+    }
+
+    pub fn md5_hash(&self) -> String {
+        let contents = read_to_string(&self.path);
+        let hash = get_md5_hash_from_string(contents.unwrap());
+        hash
+    }
+}
+
+fn get_md5_hash_from_string(content: String) -> String {
+    let mut hasher = md5::Md5::new();
+    hasher.update(content);
+    format!("{:x}", &hasher.finalize())
 }

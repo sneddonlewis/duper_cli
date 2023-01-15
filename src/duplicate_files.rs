@@ -1,8 +1,7 @@
 use crate::found_file::FoundFile;
-use md5::Digest;
 use std::collections::HashMap;
 use std::ffi::OsStr;
-use std::fs::{metadata, read_to_string};
+use std::fs::metadata;
 use std::path::PathBuf;
 use walkdir::WalkDir;
 
@@ -47,10 +46,7 @@ impl DuplicateFiles {
                 // push found file into vec
                 true => {
                     files_by_size.entry(file_size).and_modify(|f| {
-                        f.push(FoundFile {
-                            path: entry.path().to_owned(),
-                            size: file_size,
-                        })
+                        f.push(FoundFile::new(entry.path().to_owned(), file_size))
                     });
                 }
                 false => {
@@ -71,15 +67,16 @@ impl DuplicateFiles {
             file_group.iter().for_each(|file| {
                 // map to dup file with hash
                 // read the file and pass it's contents to hasher.update()
-                let contents = read_to_string(&file.path);
-                // Skip file if unable to read
-                if contents.is_err() {
-                    return;
-                }
-                let hash = get_md5_hash_from_string(contents.unwrap());
+                // let contents = read_to_string(&file.path);
+                // // Skip file if unable to read
+                // if contents.is_err() {
+                //     return;
+                // }
+                // let hash = get_md5_hash_from_string(contents.unwrap());
+                let hash = file.md5_hash();
                 potential_duplicates.push(HashedFileInfo {
-                    path: file.path.clone(),
-                    size: file.size,
+                    path: file.path(),
+                    size: file.size(),
                     hash,
                 });
             });
@@ -161,8 +158,8 @@ pub fn partition_by_duplicate_hash(
     result.clone()
 }
 
-fn get_md5_hash_from_string(content: String) -> String {
-    let mut hasher = md5::Md5::new();
-    hasher.update(content);
-    format!("{:x}", &hasher.finalize())
-}
+// fn get_md5_hash_from_string(content: String) -> String {
+//     let mut hasher = md5::Md5::new();
+//     hasher.update(content);
+//     format!("{:x}", &hasher.finalize())
+// }
