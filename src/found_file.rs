@@ -1,4 +1,4 @@
-use std::fs::read_to_string;
+use std::fs::read;
 use md5::Digest;
 use std::path::PathBuf;
 
@@ -25,16 +25,16 @@ impl FoundFile {
     }
 
     pub fn md5_hash(&self) -> Result<String, &str> {
-        let contents = read_to_string(&self.path);
-        if contents.is_err() {
+        let binary_contents = read(&self.path);
+        if binary_contents.is_err() {
             return Err("Unable to read file");
         }
-        let hash = get_md5_hash_from_string(contents.unwrap());
+        let hash = get_md5_hash_from_contents(binary_contents.unwrap());
         Ok(hash)
     }
 }
 
-fn get_md5_hash_from_string(content: String) -> String {
+fn get_md5_hash_from_contents(content: Vec<u8>) -> String {
     let mut hasher = md5::Md5::new();
     hasher.update(content);
     format!("{:x}", &hasher.finalize())
