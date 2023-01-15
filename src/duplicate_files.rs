@@ -56,10 +56,7 @@ impl DuplicateFiles {
                 false => {
                     files_by_size.insert(
                         file_size,
-                        vec![FoundFile {
-                            path: entry.path().to_owned(),
-                            size: file_size,
-                        }],
+                        vec![FoundFile::new(entry.path().to_owned(), file_size)],
                     );
                 }
             };
