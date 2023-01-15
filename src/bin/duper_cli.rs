@@ -1,14 +1,10 @@
 use clap::Parser;
 use duper::duplicate_files::{DuplicateFiles};
 use std::path::PathBuf;
+use colored::{Colorize, ColoredString};
 
 fn main() {
-    println!("  ____                        ");
-    println!(" |  _ \\ _   _ _ __   ___ _ __ ");
-    println!(" | | | | | | | '_ \\ / _ \\ '__|");
-    println!(" | |_| | |_| | |_) |  __/ |   ");
-    println!(" |____/ \\__,_| .__/ \\___|_|   ");
-    println!("             |_|              ");
+    println!("{}", get_title());
     let opts = duper::opts::Opts::parse();
     let extension_filter = opts.extension;
     if extension_filter.is_some() {
@@ -19,4 +15,14 @@ fn main() {
 
     let file_list = DuplicateFiles::search(path, extension_filter);
     file_list.list_files();
+}
+
+fn get_title() -> ColoredString {
+    let result = "  ____                        \n".to_owned() +
+        " |  _ \\ _   _ _ __   ___ _ __ \n" +
+        " | | | | | | | '_ \\ / _ \\ '__|\n" +
+        " | |_| | |_| | |_) |  __/ |   \n" +
+        " |____/ \\__,_| .__/ \\___|_|   \n" +
+        "             |_|              \n\n";
+    result.green()
 }
