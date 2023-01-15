@@ -65,14 +65,6 @@ impl DuplicateFiles {
         files_by_size.values().for_each(|file_group| {
             let mut potential_duplicates: Vec<HashedFileInfo> = vec![];
             file_group.iter().for_each(|file| {
-                // map to dup file with hash
-                // read the file and pass it's contents to hasher.update()
-                // let contents = read_to_string(&file.path);
-                // // Skip file if unable to read
-                // if contents.is_err() {
-                //     return;
-                // }
-                // let hash = get_md5_hash_from_string(contents.unwrap());
                 let hash = file.md5_hash();
                 potential_duplicates.push(HashedFileInfo {
                     path: file.path(),
@@ -157,9 +149,3 @@ pub fn partition_by_duplicate_hash(
         });
     result.clone()
 }
-
-// fn get_md5_hash_from_string(content: String) -> String {
-//     let mut hasher = md5::Md5::new();
-//     hasher.update(content);
-//     format!("{:x}", &hasher.finalize())
-// }
