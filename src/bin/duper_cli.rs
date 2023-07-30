@@ -4,9 +4,6 @@ use duper::duplicate_files::{DuplicateFiles};
 fn main() {
     let opts = duper::opts::Opts::parse();
     let extension_filter = opts.extension;
-    if extension_filter.is_some() {
-        println!("Extension Filter: {:?}", extension_filter);
-    }
 
     let path = opts.path.unwrap();
 

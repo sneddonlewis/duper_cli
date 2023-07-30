@@ -118,8 +118,7 @@ impl DuplicateFiles {
     }
 
     pub fn list_files(&self) {
-        self.files.iter().for_each(|(key, file_list)| {
-            println!("{} hash", key);
+        self.files.iter().for_each(|(_, file_list)| {
             file_list
                 .iter()
                 .map(|file| file.path.clone())
