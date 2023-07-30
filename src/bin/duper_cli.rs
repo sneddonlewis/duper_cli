@@ -2,7 +2,9 @@ use clap::{App, Parser};
 use duper::duplicate_files::{DuplicateFiles};
 
 fn main() {
-    let mut app = App::new("Duper");
+    let mut app = App::new("Duper")
+        .author("Lewis Sneddon")
+        .version("0.1.0");
     let opts = duper::opts::Opts::parse();
     let extension_filter = opts.extension;
 
