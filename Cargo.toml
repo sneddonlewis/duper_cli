@@ -11,3 +11,8 @@ walkdir = "2.3.2"
 md-5 = "0.10.5"
 hex-literal = "0.3.4"
 colored = "2.0.0"
+
+[dev-dependencies]
+assert_cmd = "2.0.12"
+predicates = "3.0.3"
+assert_fs = "1.0.13"
