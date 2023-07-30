@@ -14,7 +14,7 @@ fn main() {
             if file_list.has_duplicates() {
                 file_list.list_files();
             } else {
-                panic!("No duplicates found in directory");
+                panic!("no duplicates found in directory");
             }
         },
         None => {
