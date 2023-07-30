@@ -1,5 +1,7 @@
 # Duper
-CLI application to identify duplicate files.  
+CLI application to identify duplicate files.   
+
+[![Build Status](https://github.com/yourusername/your-repo-name/actions/workflows/rust.yml/badge.svg)](https://github.com/sneddonlewis/duper_cli/actions/workflows/rust.yml)
 
 ## Usage
 
