@@ -17,6 +17,10 @@ pub struct DuplicateFiles {
 }
 
 impl DuplicateFiles {
+    pub fn has_duplicates(&self) -> bool {
+        self.files.len() > 0
+    }
+
     pub fn search(base_path: PathBuf, extension_filter: Option<String>) -> DuplicateFiles {
         let mut files_by_size: HashMap<u64, Vec<FoundFile>> = HashMap::new();
 
