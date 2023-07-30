@@ -1,16 +1,22 @@
-use clap::Parser;
+use clap::{App, Parser};
 use duper::duplicate_files::{DuplicateFiles};
 
 fn main() {
+    let mut app = App::new("Duper");
     let opts = duper::opts::Opts::parse();
     let extension_filter = opts.extension;
 
-    let path = opts.path.unwrap();
-
-    let file_list = DuplicateFiles::search(path, extension_filter);
-    if file_list.has_duplicates() {
-        file_list.list_files();
-    } else {
-        panic!("No duplicates found in directory");
-    }
+    match opts.path {
+        Some(path) => {
+            let file_list = DuplicateFiles::search(path, extension_filter);
+            if file_list.has_duplicates() {
+                file_list.list_files();
+            } else {
+                panic!("No duplicates found in directory");
+            }
+        },
+        None => {
+            app.print_help().unwrap();
+        }
+    };
 }
