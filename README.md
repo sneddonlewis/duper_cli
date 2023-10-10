@@ -1,3 +1,4 @@
+[![CI](https://github.com/sneddonlewis/duper_cli/actions/workflows/rust.yml/badge.svg)](https://github.com/sneddonlewis/duper_cli/actions/workflows/rust.yml)
 # Duper
 CLI application to identify duplicate files.   
 
